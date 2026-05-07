@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClauseAI - Premium Legal Assistant</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Marked.js for Markdown Parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- Three.js & Vanta.js for Insane 3D Animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.fog.min.js"></script>
+    <!-- VanillaTilt for 3D Hover Effects -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
+    <!-- jsPDF for Professional Legal Reports -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body id="vanta-bg">
+    <!-- EXCLUSIVE: Cinematic Splash Screen -->
+    <div id="splash-screen" class="splash-screen">
+        <div class="splash-content">
+            <i class="fa-solid fa-scale-balanced splash-logo"></i>
+            <h1 id="splash-greeting" class="splash-text">Welcome to ClauseAI</h1>
+            <input type="text" id="user-name-input" placeholder="Enter your name..." autocomplete="off">
+        </div>
+    </div>
+
+    <div class="layout-wrapper">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <button class="new-chat-btn" id="new-chat-btn">
+                    <i class="fa-solid fa-plus"></i> New Chat
+                </button>
+            </div>
+            <div class="history-container" id="history-container">
+                <div class="history-section">
+                    <span class="section-title">Recent Chats</span>
+                    <div id="history-list">
+                        <!-- History items will be injected here -->
+                    </div>
+                </div>
+            </div>
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="user-avatar" id="user-avatar-initials">S</div>
+                    <span id="sidebar-username">User</span>
+                </div>
+                <button class="sidebar-settings-btn">
+                    <i class="fa-solid fa-ellipsis"></i>
+                </button>
+            </div>
+        </aside>
+
+        <div class="app-container">
+            <!-- Header -->
+            <header class="chat-header">
+                <div class="header-content">
+                    <div class="logo">
+                        <button id="sidebar-toggle" class="sidebar-toggle-btn">
+                            <i class="fa-solid fa-bars-staggered"></i>
+                        </button>
+                        <i class="fa-solid fa-scale-balanced logo-icon"></i>
+                        <div>
+                            <h1 style="display: flex; align-items: center; gap: 10px;">
+                                ClauseAI 
+                                <span style="font-size: 0.65rem; background: rgba(34, 197, 94, 0.2); color: #4ade80; padding: 3px 8px; border-radius: 12px; font-weight: 500; border: 1px solid rgba(34, 197, 94, 0.3); letter-spacing: 0.5px; box-shadow: 0 0 10px rgba(34, 197, 94, 0.2);">
+                                    <i class="fa-solid fa-circle" style="font-size: 0.4rem; vertical-align: middle; margin-right: 3px; margin-bottom: 1px; animation: blinkCursor 2s infinite;"></i> Online
+                                </span>
+                            </h1>
+                            <p class="subtitle">Smart Contract Analyzer & Legal Advisor</p>
+                        </div>
+                    </div>
+                    <div class="header-actions">
+                        <button id="insights-toggle" class="aesthetic-btn icon-btn" title="Toggle Legal Insights">
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </button>
+                        <button id="confidential-toggle" class="aesthetic-btn icon-btn" title="Confidential Redaction Mode">
+                            <i class="fa-solid fa-user-secret"></i>
+                        </button>
+                        <button id="export-chat" class="aesthetic-btn icon-btn" title="Export Legal Report">
+                            <i class="fa-solid fa-file-export"></i>
+                        </button>
+                        <button id="clear-chat" class="aesthetic-btn icon-btn" title="Clear Chat History">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                        <button id="theme-toggle" class="aesthetic-btn icon-btn" title="Toggle Theme">
+                            <i class="fa-solid fa-sun" id="theme-icon"></i>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Chat Window -->
+            <main class="chat-window" id="chat-window">
+                <div class="message ai-message">
+                    <div class="avatar"><i class="fa-solid fa-robot"></i></div>
+                    <div class="bubble-wrapper">
+                        <div class="bubble">
+                            Hello! I am ClauseAI, your premium legal assistant. You can ask me legal questions, or upload a contract document and I'll analyze the clauses and risks for you.
+                        </div>
+                        <div class="timestamp">Just now</div>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Quick Action Prompts -->
+            <div class="quick-prompts" id="quick-prompts">
+                <button class="prompt-pill">⚖️ What is an NDA?</button>
+                <button class="prompt-pill">📝 Explain Force Majeure</button>
+                <button class="prompt-pill">⚠️ Analyze standard contract risks</button>
+                <button class="prompt-pill">💼 What are IP Rights?</button>
+            </div>
+
+            <!-- Input Area -->
+            <footer class="input-area">
+                <!-- Rich File Preview Area -->
+                <div id="file-preview-container" class="file-preview-container"></div>
+                
+                <form id="chat-form" enctype="multipart/form-data">
+                    <div class="upload-wrapper" style="position: relative;">
+                        <button type="button" class="aesthetic-btn upload-btn" id="plus-btn" title="Attach File">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                        
+                        <div class="upload-menu" id="upload-menu">
+                            <label for="file-upload" class="upload-menu-item">
+                                <i class="fa-solid fa-file-pdf" style="color: #ef4444;"></i> Upload PDF
+                            </label>
+                            <label for="file-upload" class="upload-menu-item">
+                                <i class="fa-solid fa-file-lines" style="color: #3b82f6;"></i> Upload TXT
+                            </label>
+                            <label for="file-upload" class="upload-menu-item">
+                                <i class="fa-solid fa-file-word" style="color: #2563eb;"></i> Upload DOCX
+                            </label>
+                        </div>
+                    </div>
+                    <input type="file" id="file-upload" name="file" accept=".pdf,.txt,.docx" style="display: none;">
+                    
+                    <div class="input-wrapper">
+                        <textarea id="message-input" placeholder="Type your legal question or attach a file..." rows="1"></textarea>
+                        <button type="button" id="voice-btn" class="voice-btn" title="Speak your question">
+                            <i class="fa-solid fa-microphone"></i>
+                        </button>
+                    </div>
+                    
+                    <button type="submit" class="aesthetic-btn send-btn" id="send-btn" title="Send">
+                        <i class="fa-solid fa-paper-plane"></i>
+                    </button>
+                </form>
+            </footer>
+        </div>
+
+        <!-- Right Panel: Legal Insights -->
+        <aside class="right-panel" id="right-panel">
+            <div class="panel-header">
+                <i class="fa-solid fa-shield-halved"></i>
+                <span>Legal Insights</span>
+            </div>
+            
+            <div class="panel-body">
+                <div class="risk-meter-container">
+                    <div class="risk-meter">
+                        <svg viewBox="0 0 100 50">
+                            <path d="M 10 50 A 40 40 0 0 1 90 50" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="8" stroke-linecap="round"/>
+                            <path id="risk-path" d="M 10 50 A 40 40 0 0 1 90 50" fill="none" stroke="var(--accent-primary)" stroke-width="8" stroke-dasharray="125.6" stroke-dashoffset="125.6" stroke-linecap="round" style="transition: stroke-dashoffset 1s ease-out;"/>
+                        </svg>
+                        <div class="risk-value" id="risk-value">0%</div>
+                        <div class="risk-label">CONTRACT RISK</div>
+                    </div>
+                </div>
+
+                <div class="insights-section">
+                    <h3><i class="fa-solid fa-bolt"></i> Key Flags</h3>
+                    <div id="key-flags" class="flags-list">
+                        <div class="empty-flag">No flags detected yet.</div>
+                    </div>
+                </div>
+
+                <div class="insights-section">
+                    <h3><i class="fa-solid fa-list-check"></i> Summary</h3>
+                    <div id="legal-summary" class="summary-text">
+                        Please upload or paste a contract to begin the analysis.
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Toast Notification System -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>

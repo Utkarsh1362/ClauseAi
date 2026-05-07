@@ -1,0 +1,82 @@
+<html>
+<head>
+    <title>Start ClauseAI</title>
+    <HTA:APPLICATION 
+        ID="ClauseAILauncher" 
+        APPLICATIONNAME="ClauseAILauncher" 
+        BORDER="thin" 
+        SCROLL="no" 
+        SINGLEINSTANCE="yes" 
+        WINDOWSTATE="normal" 
+    />
+    <style>
+        body {
+            background-color: #050505;
+            color: #f8fafc;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            padding: 50px 20px;
+            margin: 0;
+            overflow: hidden;
+        }
+        h1 {
+            color: #a78bfa;
+            margin-bottom: 10px;
+            font-size: 32px;
+        }
+        p {
+            color: #94a3b8;
+            margin-bottom: 40px;
+            font-size: 15px;
+        }
+        button {
+            background: linear-gradient(135deg, #6d28d9, #2563eb);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(109, 40, 217, 0.4);
+            font-weight: 600;
+        }
+        button:hover {
+            box-shadow: 0 6px 20px rgba(109, 40, 217, 0.6);
+        }
+    </style>
+    <script language="VBScript">
+        Sub Window_onLoad
+            window.resizeTo 500, 350
+        End Sub
+
+        Sub LaunchProject
+            Dim objShell, strPath, pos
+            Set objShell = CreateObject("WScript.Shell")
+            
+            ' 100% foolproof path resolution
+            strPath = unescape(document.location.pathname)
+            If Left(strPath, 1) = "/" Then
+                strPath = Mid(strPath, 2)
+            End If
+            strPath = Replace(strPath, "/", "\")
+            
+            pos = InStrRev(strPath, "\")
+            If pos > 0 Then
+                strPath = Left(strPath, pos - 1)
+                objShell.CurrentDirectory = strPath
+            End If
+            
+            ' Run the run.bat script silently
+            objShell.Run "cmd.exe /c run.bat", 1, False
+            
+            ' Close this launcher window
+            window.Close()
+        End Sub
+    </script>
+</head>
+<body>
+    <h1>ClauseAI</h1>
+    <p>Your Premium Animated Legal Assistant</p>
+    <button onclick="LaunchProject()">Start Application</button>
+</body>
+</html>
